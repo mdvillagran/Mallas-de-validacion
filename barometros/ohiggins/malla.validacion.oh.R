@@ -28,8 +28,6 @@ data1<-cbind(parte1, parte2)
 data1<-data1 %>% select(-(OH1_1:LR5_3)) # eliminamos preguntas de regionales que no son de los lagos
 
 
-
-
 ######################## UNION DE VARIABLES DE LA BASE #########################
 
 
@@ -95,66 +93,173 @@ data<-data %>% mutate (MAINSTAT= coalesce (MAINSTAT,MAINSTAT_OTRO))
 data$NAT_RELIG<-as.factor(data$NAT_RELIG)
 data<-data %>% mutate (NAT_RELIG= coalesce (NAT_RELIG,NAT_RELIG_OTRA))
 
-data$NAT_PRTY<-as.factor(data$NAT_PRTY)
-data<-data %>% mutate (NAT_PRTY= coalesce (NAT_PRTY,NAT_PRTY_OTRA))
-
-data$NAT_ETHN1<-as.factor(data$NAT_ETHN1)
-data<-data %>% mutate (NAT_ETHN1= coalesce (NAT_ETHN1,NAT_ETHN_2))
-
-data$MARITAL<-as.factor(data$MARITAL)
-data<-data %>% mutate (MARITAL= coalesce (MARITAL,MARITAL_OTRA))
-
-data$F_BORN<-as.factor(data$F_BORN)
-data<-data %>% mutate (F_BORN= coalesce (F_BORN,F_BORN_OTRA))
-
-data$M_BORN<-as.factor(data$M_BORN)
-data<-data %>% mutate (M_BORN= coalesce (M_BORN,M_BORN_OTRA))
-
-data$INM_1<-as.factor(data$INM_1)
-data<-data %>% mutate (INM_1= coalesce (INM_1,INM_1_OTRA_COMUNA))
-data<-data %>% mutate (INM_1= coalesce (INM_1,INM_1_OTRO_PAIS))
 
 
-############################# PREGUNTAS OBLIGATORIAS ###########################
+######################### PREGUNTAS OBLIGATORIAS ###############################
+
+# 1 MODULO IDENTIDAD, PERTENENCIA TERRITORIAL Y MOVILIDAD
+
+# pregunta 1: p1_a,p1_b,p1_c
+# pregunta 2: p2
+# pregunta 5: p5_1:p5_11
+
+# pregunta 6: p6
+# pregunta 7: p7
+# pregunta 8: p8
+# pregunta 9: p9
+# pregunta 10: p10_1: p10_12
+# pregunta 11: p11_1: p11_12
+# pregunta 12: p12_1: p12_4
+# pregunta 13: p13_1: p13_11
+# pregunta 14: p14
+# pregunta 14.1: p14_1
+# pregunta 16: p16_1: p16_7
+# pregunta 17: p17_1: p17_7
+# pregunta 18: p18_a: p18_c
+# pregunta 19: p19_a: p19_c
+# pregunta 20: p20_a: p20_c
+# pregunta 21: p21_a: p21_c
+# pregunta 22: p22_a: p22_b
+# pregunta 23: p23_1: p23_12
+# pregunta 26: p26_1: p26_8
+# pregunta 27: p27_1: p27_9
+# pregunta 28: p28
+# pregunta 29: p29
+# pregunta 30: p30_a: p30_c
+# pregunta 31: p31
+# pregunta 32: p32
+# pregunta 33: p33_a: p33_c
+# pregunta 35: p35
+# pregunta 37: p37
+# pregunta r1: LL1
+# pregunta r2: LL2_1 : LL2_4
+# pregunta r3: LL3
+# pregunta r4: LL4
+# pregunta tel: telefono_contacto
+# pregunta s1: S1_sexo
+# pregunta s2: S2_edad
+# pregunta s3: S3_nacionalidad
+# pregunta s4: S4_nivel_estudio
+# pregunta s5: S5_estudios_sostenedor
+# pregunta s6: S6_actividad_principal
+# pregunta s7: S7_actividad_jefeHogar
+# pregunta s8: S8_ocupacion
+# pregunta s9: S9_pueblo_originario
+# pregunta s11: S11_personas_hogar
+
+
+# FUNDIR VARIABLES DE INGRESOS
+
+S12_tramo_1
+S12_tramo_2
+S12_tramo_3
+S12_tramo_4
+S12_tramo_5
+S12_tramo_6
+S12_tramo_7
+
+# pregunta s gse: S_GSE
+# pregunta s: S_A
 
 
 
-# VARIABLES (CON SALTO) QUE DEBEN EXCLUIRSE
 
-# 1 MODULO BASICO / M1_1A , M1_16 # deben escluirse:
 
-# NINGUNA
 
-# 2 MODULO PROCESO CONSTITUYENTE /  M2_1 , M2_13
 
-m2<-c("M2_6A","M2_6AA","M2_6B","M2_6BB","M2_9","M2_9_OTRA","M2_10","M2_10_OTRA",
-"M2_11","M2_11_OTRA","M2_12","M2_12_OTRA")
 
-# 3 MODULO GENERO / M3_1_1 , M3_28_5
 
-m3<-c("M3_8","M3_8B","P8B_MESES","M3_9","M2_15A_1","M3_15B_1","M3_16A","M3_16A_1",
-"M3_16B","M3_16B_1","M3_17","M3_18_1","M3_18_2","M3_18_3","M3_18_4","M3_18_5",
-"M3_18_6","M3_19")
+########################### PREGUNTAS CON SALTO ################################
 
-# 4 MODULO DE ELECCIONES PRESIDENCIALES / M4_1 , M4_6
+# salto p3(10) -> p3_1
+# salto p2(2) -> p5_1
+# salto p14(2,88,99) -> p16_1
 
-m4<-c("M4_2","M4_2B","M4_4A","M4_4B")
 
-# 5 MODULO COYUNTURA / M5_1 , M5_7
+############################# Salto tipo 2 #####################################
 
-# NINGUNA
+# salto p35() -> p36 NA -> p37 dato. esta última es respondida por todos
 
-# 6 MODULO SOCIOECONOMICO / SEXO
 
-m6<-c("EDUCYRS","EDUCYRS_TEX","WRKHRS","WRKHRS_TEX","EMPREL","WRKSUP","NSUP",
-"NSUP_TEX","TYPORG1","TYPORG2","ISCO08_1","ISCO08_1_TEX","ISCO08_2","ISCO08_2_TEX",
-"MAINSTAT_OTRO","SPWORK","SPWRKHRS","SPWRKHRS_TEXT","SPWORK","SPWRKHRS","SPWRKHRS_TEXT",
-"HORAINI_DEMO_7","SPEMPREL","SPWRKSUP","SPISCO08_1","SPISCO08_1_TEX","SPISCO08_2",
-"SPISCO08_2_TEX","SPMAINST","SPMAINST_OTRA","NAT_RELIG_OTRA","NAT_PRTY_OTRA",
-"HHOMPOP_OTRA","HHADULT","HHADULT_OTRA","HHCHILDR","HHCHILDR_OTRA","HHTODD",
-"HHTODD_OTRA","CANT_RESP","SUMA_DEF","CONTROL_SUMA","MARITAL_OTRA","F_BORN_OTRA",
-"M_BORN_OTRA","INM_1_OTRA_COMUNA","INM_1_OTRO_PAIS","INM_2","INM_2_OTRA","SEG_4",
-"C4","INFO_CONT","B","DS_P50")
+
+# 1 MODULO IDENTIDAD, PERTENENCIA TERRITORIAL Y MOVILIDAD
+
+m1<-c("p1_a","p1_b","p1_c", "p2", "p3", "p3_1")
+
+# 2 MODULO CONOCIMIENTO Y REPRESENTACIÓN DE LA REGIÓN 
+
+m2<-c("p5_1","p5_2","p5_3","p5_4","p5_5","p5_6","p5_7","p5_8",
+"p5_9","p5_10","p5_11","p6","p7" )
+
+# 3 MODULO EVALUACIÓN DE LA REGIÓN (DEFINICIÓN DE PROBLEMAS Y PRIORIDADES REGIONALES) 
+
+m3<-c("p8","p9","p10_1","p10_2","p10_3","p10_4","p10_5","p10_6","p10_7","p10_8",
+      "p10_9","p10_10","p10_11","p10_12","p11_1","p11_2","p11_3",
+      "p11_4","p11_5","p11_6","p11_7","p11_8","p11_9","p11_10","p11_11","p11_12")
+
+# 4 MODULO DISPOSICIÓN A LA PARTICIPACIÓN EN EL ESPACIO PÚBLICO Y EN EL PROCESO DE DESCENTRALIZACIÓN
+
+m4<-c("p12_1","p12_2","p12_3","p12_4","p13_1","p13_2","p13_3","p13_4","p13_5",
+      "p13_6","p13_7","p13_8","p13_9","p13_10","p13_11","P14","p14_1")
+
+
+# 5 MODULO PERCEPCIÓN DE CONFLICTO SOCIOAMBIENTAL
+
+m5<-c("p16_1","p16_2","p16_3","p16_4","p16_5","p16_6","p16_7","p17_1","p17_2","p17_3",
+      "p17_4","p17_5","p17_6","p17_7")
+
+
+
+# 6 MODULO CONSUMO DE MEDIOS  
+
+m6<-c("P18_a","p18_b","p18_c")
+
+# 7 OBSTÁCULOS Y HERRAMIENTAS PARA EL DESARROLLO REGIONAL 
+
+m7<-c("p20_a","p20_b","p21_a","p21_b","p22_a","p22_b","p23_1","p23_2",
+      "p23_3","p23_4","p23_5","p23_6","p23_7","p23_8","p23_9","p23_10",
+      "p23_11","p23_12")
+
+# 8 DESCENTRALIZACIÓN  
+
+m8<-c("p26_1","p26_2","p26_3","p26_4","p26_5","p26_6","p26_7","p26_8",
+"p27_1","p27_2","p27_3","p27_4","p27_5","p27_6","p27_7","p27_8",
+"p27_9","p28","p29","p30_a","p30_b","p31")
+
+# 9 EFECTOS DE LA PANDEMIA EN LA REGIÓN
+
+m9<-c("p32","p33_a","p33_b","p33_c")
+
+# 10 PROCESO CONSTITUYENTE
+
+m10<-c("p39","p40","p41")
+
+# 11 IDENTIFICACIÓN POLÍTICA
+
+m11<-c("p35","p36","p37")
+
+# 12 PREGUNTAS REGIONALES
+
+m11<-c("LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4")
+
+
+# 13 CARACTERIZACIÓN DEL ENTREVISTADO
+
+m11<-c("telefono_contacto","S1_sexo","S2_edad","S3_nacionalidad","S4_nivel_estudio",
+       "S5_estudios_sostenedor","S6_actividad_principal","S7_actividad_jefeHogar",
+       "S8_ocupacion","S9_pueblo_originario", "S11_personas_hogar")
+
+telefono_contacto
+S1_sexo
+S2_edad
+S3_nacionalidad
+S4_nivel_estudio
+S5_estudios_sostenedor
+S6_actividad_principal
+S7_actividad_jefeHogar
+S8_ocupacion
+S9_pueblo_originario
+S11_personas_hogar
 
 
 # DESCONTAMOS LAS PREGUNTAS CON SALTO DE LAS VARIABLES A REVISAR
