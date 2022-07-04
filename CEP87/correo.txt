@@ -1,0 +1,17 @@
+http://mobinet.cadem.cl/integraweb_v4/integra/html/view/
+
+
+Las credenciales de acceso son las siguientes (las mismas que para Cep mapuche):
+
+Usuario: DATAVOZ_2022
+clave: DATAVOZ
+ 
+
+Y las instrucciones para acceder a la encuesta:
+
+ 
+
+En el menú principal, pinchar el cabezal “Gestión” y “Seleccionar estudio”.
+Luego, seleccionar el estudio “2788 || 17316_CEP87_FINAL || 17316_CEP87_FINAL” y aceptar.
+De ahí, ir a cabezal “Campo” y pinchar “Simulación”.
+En la nueva ventana, pinchar el botón celeste que dice Simular y el nombre del estudio
