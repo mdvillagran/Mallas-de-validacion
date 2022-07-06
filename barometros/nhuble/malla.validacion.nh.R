@@ -120,7 +120,7 @@ data1<- data1 %>% mutate(S12_tramo_1 = coalesce(!!! syms(variables)))
 # 
 # # 12 PREGUNTAS REGIONALES
 # 
-# m12<-c("LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4")
+# m12<-c("NU1","NU2","NU3","NU4","NU5")
 # 
 # 
 # # 13 CARACTERIZACIÓN DEL ENTREVISTADO
@@ -175,7 +175,7 @@ obligatorias<-c("p1_a","p1_b","p1_c", "p2",
                 # modulo 11
 "p41", 
                 # modulo 12
-"LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4",
+"NU1","NU2","NU3","NU4","NU5",
                 # modulo 13
 "telefono_contacto","S1_sexo","S2_edad","S3_nacionalidad","S4_nivel_estudio",
        "S5_estudios_sostenedor","S6_actividad_principal","S7_actividad_jefeHogar",
