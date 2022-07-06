@@ -53,160 +53,83 @@ for (i in nombres$variables.base){
 
 # FUNDIR VARIAS VARIABLES (DE INGRESOS) AL MISMO TIEMPO
 
-grep("S12_tramo_1", names(data1))
-grep("S12_tramo_7", names(data1))
+a<-grep("S12_tramo_1", names(data1))
+b<-grep("S12_tramo_7", names(data1))
 
-variables<-names(data1[209:215])
+variables<-names(data1[a:b])
 
 data1<- data1 %>% mutate(S12_tramo_1 = coalesce(!!! syms(variables)))
 
-################################################################################
-######################### PREGUNTAS OBLIGATORIAS ###############################
-################################################################################
 
-# 1 MODULO IDENTIDAD, PERTENENCIA TERRITORIAL Y MOVILIDAD
-
-# pregunta 1: p1_a,p1_b,p1_c
-# pregunta 2: p2
-# pregunta 5: p5_1:p5_11
-# pregunta 6: p6
-# pregunta 7: p7
-# pregunta 8: p8
-# pregunta 9: p9
-# pregunta 10: p10_1: p10_12
-# pregunta 11: p11_1: p11_12
-# pregunta 12: p12_1: p12_4
-# pregunta 13: p13_1: p13_11
-# pregunta 16: p16_1: p16_7
-# pregunta 17: p17_1: p17_7
-# pregunta 18: p18_a: p18_c
-# pregunta 19: p19_a: p19_c
-# pregunta 20: p20_a
-# pregunta 21: p21_a
-# pregunta 22: p22_a
-# pregunta 23: p23_1: p23_12
-# pregunta 26: p26_1: p26_8
-# pregunta 27: p27_1: p27_9
-# pregunta 28: p28
-# pregunta 29: p29
-# pregunta 30: p30_a
-# pregunta 31: p31
-# pregunta 32: p32
-# pregunta 33: p33_a: p33_c
-# pregunta 35: p35
-# pregunta 37: p37
-# pregunta 41: p41
-# pregunta r1: LL1
-# pregunta r2: LL2_1 : LL2_4
-# pregunta r3: LL3
-# pregunta r4: LL4
-# pregunta tel: telefono_contacto
-# pregunta s1: S1_sexo
-# pregunta s2: S2_edad
-# pregunta s3: S3_nacionalidad
-# pregunta s4: S4_nivel_estudio
-# pregunta s5: S5_estudios_sostenedor
-# pregunta s6: S6_actividad_principal
-# pregunta s7: S7_actividad_jefeHogar
-# pregunta s8: S8_ocupacion
-# pregunta s9: S9_pueblo_originario
-# pregunta s11: S11_personas_hogar
-
-
-
-
-# pregunta s gse: S_GSE
-# pregunta s: S_A
-
-
-
-
-
-# 1ra forma: sin usar condicionales
-
-
-########################### PREGUNTAS CON SALTO ################################
-
-
-# salto p3(10) -> p3_1
-# salto p3(1:7) -> p4
-# salto p3(88,99) -> p5_1
-# salto p3(10) -> p3_1
-# salto p14(2,88,99) -> p14_1
-# salto s: S_A (1) -> S_B
-
-############################# Salto tipo 2 #####################################
-# salto p2(2) ->p3(NA) -> p4
-# salto p35(3) -> p36 (NA )-> p37 dato. esta última es respondida por todos
 
 ####################### Detalle de preguntas por modulo ########################
 
 # 1 MODULO IDENTIDAD, PERTENENCIA TERRITORIAL Y MOVILIDAD
 
-m1<-c("p1_a","p1_b","p1_c", "p2", "p3", "p3_1")
-
-# 2 MODULO CONOCIMIENTO Y REPRESENTACIÓN DE LA REGIÓN 
-
-m2<-c("p5_1","p5_2","p5_3","p5_4","p5_5","p5_6","p5_7","p5_8",
-"p5_9","p5_10","p5_11","p6","p7" )
-
-# 3 MODULO EVALUACIÓN DE LA REGIÓN (DEFINICIÓN DE PROBLEMAS Y PRIORIDADES REGIONALES) 
-
-m3<-c("p8","p9","p10_1","p10_2","p10_3","p10_4","p10_5","p10_6","p10_7","p10_8",
-      "p10_9","p10_10","p10_11","p10_12","p11_1","p11_2","p11_3",
-      "p11_4","p11_5","p11_6","p11_7","p11_8","p11_9","p11_10","p11_11","p11_12")
-
-# 4 MODULO DISPOSICIÓN A LA PARTICIPACIÓN EN EL ESPACIO PÚBLICO Y EN EL PROCESO DE DESCENTRALIZACIÓN
-
-m4<-c("p12_1","p12_2","p12_3","p12_4","p13_1","p13_2","p13_3","p13_4","p13_5",
-      "p13_6","p13_7","p13_8","p13_9","p13_10","p13_11","P14","p14_1")
-
-
-# 5 MODULO PERCEPCIÓN DE CONFLICTO SOCIOAMBIENTAL
-
-m5<-c("p16_1","p16_2","p16_3","p16_4","p16_5","p16_6","p16_7","p17_1","p17_2","p17_3",
-      "p17_4","p17_5","p17_6","p17_7")
-
-# 6 MODULO CONSUMO DE MEDIOS  
-
-m6<-c("P18_a","p18_b","p18_c")
-
-# 7 OBSTÁCULOS Y HERRAMIENTAS PARA EL DESARROLLO REGIONAL 
-
-m7<-c("p19_a","p19_b","p19_c","p20_a","p21_a","p21_b","p22_a","p22_b","p23_1","p23_2",
-      "p23_3","p23_4","p23_5","p23_6","p23_7","p23_8","p23_9","p23_10",
-      "p23_11","p23_12")
-
-# 8 DESCENTRALIZACIÓN  
-
-m8<-c("p26_1","p26_2","p26_3","p26_4","p26_5","p26_6","p26_7","p26_8",
-"p27_1","p27_2","p27_3","p27_4","p27_5","p27_6","p27_7","p27_8",
-"p27_9","p28","p29","p30_a","p30_b","p31")
-
-# 9 EFECTOS DE LA PANDEMIA EN LA REGIÓN
-
-m9<-c("p32","p33_a","p33_b","p33_c")
-
-# 10 PROCESO CONSTITUYENTE
-
-m10<-c("p35","p36","p37")
-
-# 11 IDENTIFICACIÓN POLÍTICA
-
-m11<-c("p39","p40","p41")
-
-# 12 PREGUNTAS REGIONALES
-
-m12<-c("LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4")
-
-
-# 13 CARACTERIZACIÓN DEL ENTREVISTADO
-
-m13<-c("telefono_contacto","S1_sexo","S2_edad","S3_nacionalidad","S4_nivel_estudio",
-       "S5_estudios_sostenedor","S6_actividad_principal","S7_actividad_jefeHogar",
-       "S8_ocupacion","S9_pueblo_originario", "S11_personas_hogar","S12_tramo_1")
-
-
+# m1<-c("p1_a","p1_b","p1_c", "p2", "p3", "p3_1")
+# 
+# # 2 MODULO CONOCIMIENTO Y REPRESENTACIÓN DE LA REGIÓN 
+# 
+# m2<-c("p5_1","p5_2","p5_3","p5_4","p5_5","p5_6","p5_7","p5_8",
+# "p5_9","p5_10","p5_11","p6","p7" )
+# 
+# # 3 MODULO EVALUACIÓN DE LA REGIÓN (DEFINICIÓN DE PROBLEMAS Y PRIORIDADES REGIONALES) 
+# 
+# m3<-c("p8","p9","p10_1","p10_2","p10_3","p10_4","p10_5","p10_6","p10_7","p10_8",
+#       "p10_9","p10_10","p10_11","p10_12","p11_1","p11_2","p11_3",
+#       "p11_4","p11_5","p11_6","p11_7","p11_8","p11_9","p11_10","p11_11","p11_12")
+# 
+# # 4 MODULO DISPOSICIÓN A LA PARTICIPACIÓN EN EL ESPACIO PÚBLICO Y EN EL PROCESO DE DESCENTRALIZACIÓN
+# 
+# m4<-c("p12_1","p12_2","p12_3","p12_4","p13_1","p13_2","p13_3","p13_4","p13_5",
+#       "p13_6","p13_7","p13_8","p13_9","p13_10","p13_11","P14","p14_1")
+# 
+# 
+# # 5 MODULO PERCEPCIÓN DE CONFLICTO SOCIOAMBIENTAL
+# 
+# m5<-c("p16_1","p16_2","p16_3","p16_4","p16_5","p16_6","p16_7","p17_1","p17_2","p17_3",
+#       "p17_4","p17_5","p17_6","p17_7")
+# 
+# # 6 MODULO CONSUMO DE MEDIOS  
+# 
+# m6<-c("P18_a","p18_b","p18_c")
+# 
+# # 7 OBSTÁCULOS Y HERRAMIENTAS PARA EL DESARROLLO REGIONAL 
+# 
+# m7<-c("p19_a","p19_b","p19_c","p20_a","p21_a","p21_b","p22_a","p22_b","p23_1","p23_2",
+#       "p23_3","p23_4","p23_5","p23_6","p23_7","p23_8","p23_9","p23_10",
+#       "p23_11","p23_12")
+# 
+# # 8 DESCENTRALIZACIÓN  
+# 
+# m8<-c("p26_1","p26_2","p26_3","p26_4","p26_5","p26_6","p26_7","p26_8",
+# "p27_1","p27_2","p27_3","p27_4","p27_5","p27_6","p27_7","p27_8",
+# "p27_9","p28","p29","p30_a","p30_b","p31")
+# 
+# # 9 EFECTOS DE LA PANDEMIA EN LA REGIÓN
+# 
+# m9<-c("p32","p33_a","p33_b","p33_c")
+# 
+# # 10 PROCESO CONSTITUYENTE
+# 
+# m10<-c("p35","p36","p37")
+# 
+# # 11 IDENTIFICACIÓN POLÍTICA
+# 
+# m11<-c("p39","p40","p41")
+# 
+# # 12 PREGUNTAS REGIONALES
+# 
+# m12<-c("LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4")
+# 
+# 
+# # 13 CARACTERIZACIÓN DEL ENTREVISTADO
+# 
+# m13<-c("telefono_contacto","S1_sexo","S2_edad","S3_nacionalidad","S4_nivel_estudio",
+#        "S5_estudios_sostenedor","S6_actividad_principal","S7_actividad_jefeHogar",
+#        "S8_ocupacion","S9_pueblo_originario", "S11_personas_hogar","S12_tramo_1")
+# 
+# 
 
 
 ################################################################################
@@ -314,20 +237,15 @@ resultadosNA<-resultadosNA %>%
 # Creación de vectores SALIDAS, LLEGADAS y CRITERIO DE SALTO
 
 # salto p3(10) -> p3_1
-# salto p3(1:7) -> p4
-# salto p3(88,99) -> p5_1
-# salto p3(10) -> p3_1
 # salto p14(2,88,99) -> p14_1
 # salto s: S_A (1) -> S_B
 
 
+salida<-c("p3","P14","S_A")
 
+criterio.salto<-c("10","1","1")
 
-salida<-c("p3","p3","p3","P14","S_A")
-
-criterio.salto<-c("10","1:7","88,99","1","1")
-
-llegada<-c("p3_1","p4","p5_1","p14_1", "S_B")
+llegada<-c("p3_1","p14_1", "S_B")
 
 
 
@@ -436,18 +354,19 @@ resultadosS<-resultadosS %>%
 
 
 # salto p2(2) ->p3(NA) -> p4
+# salto p3(1:7)->(p3_1)->p4
 # salto p35(3) -> p36 (NA )-> p37 dato. esta última es respondida por todos
 
 
 
 
-salida<-c("p2","p35")
+salida<-c("p2","p3","p35")
 
-criterio.salto<-c("2","3")
+criterio.salto<-c("2","1:7","3")
 
-llegada1<-c("p3","p36")
+llegada1<-c("p3","p3_1","p36")
 
-llegada2<-c("p4","p37")
+llegada2<-c("p4","p4","p37")
 
 
 resultados2<-data.frame(data1$SbjNum)
@@ -511,7 +430,7 @@ saltos.p[saltos.p=="101"]<-1
 saltos.p[saltos.p=="111"]<-0
 saltos.p[saltos.p=="100"]<-0
 saltos.p[saltos.p=="011"]<-NA
-saltos.p[saltos.p=="001"]<-0
+saltos.p[saltos.p=="001"]<-NA
 saltos.p[saltos.p=="010"]<-0
 saltos.p[saltos.p=="110"]<-0
 
@@ -533,6 +452,7 @@ resultados2<-resultados2 %>%
                    '101'='s. correcto','111'='error', '100'='error',
                    '011'='sin salto','001'='sin salto','010'='sin salto',
                    '110'='error')
+
 
 
  # Exportacion de los resultados a excel único
