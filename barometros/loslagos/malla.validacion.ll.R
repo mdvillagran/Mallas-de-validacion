@@ -1,7 +1,6 @@
 
 rm(list = ls())
-setwd("C:/Users/villagran/Desktop/scribs/datavoz/mallas de validacion/CEP87")
-
+setwd("C:/Users/villagran/Desktop/datavoz/Barometros/mallas.v/ll")
 
 # LECTURA DE BB.DD DE DATOS
 library(openxlsx)
@@ -9,564 +8,270 @@ library(dplyr)
 library(tidyverse)
 library(stringr)
 library(haven)
+library(labelled)
 
-
-###-> CADA UNA CORRESPONDE A UNA ROTACION DETERMINADA (ROTACIONES), DESCRITA EN: _1
-# P15_1
-# P15_2
-# P15_3
-# P15_4
-
-###-> SALTOS DESDE M2_4
-
-#ALTERNATIVA 1 A: M2_6A, M2_6AA
-#ALTERNATIVA 2 A: M2_6B, M2_6BB
-#ALTERNATIVA 3 A: M2_6C, M2_6CC
-#ALTERNATIVA 88 Y 99 A: M2_14
-
-###-> COALESCE M2_14 Y M2_P14_OTRA
-
-###-> COALESCE M2_9 Y M2_9_OTRA ; M2_10 Y M2_10_OTRA 
-###-> COALESCE M2_11 Y M2_11_OTRA ; M2_12 Y M2_12_OTRA
-
-###-> SALTOS DESDE M2_8
-
-# ALTERNATIVA 1 A: M2_13
-# ALTERNATIVA 2 A: M2_9, M2_10, M2_11, M2_12
-# ALTERNATIVA 88 Y 99 A: M2_13 
-
-###-> COALESCE M3_6 (SE DEBE RECODIFICAR LOS 1 EN NA) Y M3_6_NUM
-
-###-> SALTOS DESDE M3_8
-
-# ALTERNATIVA 1 A: P8B_MESES, M3_9
-# ALTERNATIVA 2 A: 
-
-###-> SALTO DESDE M3_FILTRO
-
-# ALTERNATIVA 1 A: M3_16A,M3_16A_1,M3_16B,M3_16B_1,M3_17,M3_18_1,M3_18_2,
-# M3_18_3,M3_18_4,M3_18_5,M3_18_6,M3_19
-
-# ALTERNATIVA 2, 88 Y 99 A: M3_20_1
-
-###-> COALESCE M3_16A Y M3_16A_1 ; M3_16B Y M3_16B_1 !! SE DEBEN CODIFICAR PRIMERO
-# LOS 1 COMO "NA" EN LA VARIABLE BASE (EJEMPLO M3_16A), REALIZAR LA FUNCISN Y 
-# LUEGO VOLVER A CODIFICAR LOS ESPACIOS VACMOS "" COMO NAs
-
-###-> SALTO DESDE M4_1
-# ALTERNATIVA 1 A: M4_2
-# ALTERNATIVA 2, 88 Y 99 A: M4_2B
-
-###-> SALTO DESDE M4_3
-# ALTERNATIVA 1 A: M4_4A
-# ALTERNATIVA 2, 88 Y 99 A: M4_4B
-
-
-###-> SALTO DESDE EDAD
-
-# ALTERNATIVA 1 A: EDAD_EXACTA
-# ALTERNATIVA 99 A: NAC
-
-###
-
-###-> SALTO DESDE NAC
-# ALTERNATIVA 1 A:
-
-###-> SALTO DESDE NIVELEDUC
-# ALTERNATIVAS 1 A 11 A: EDUCYRS
-# ALTERNATIVA 99 A: WRK
-
-
-###-> SALTO DESDE WRK
-# ALTERNATIVA 1 A: WRKHRS
-# ALTERNATIVA 2 A: EMPREL
-# ALTERNATIVA 3 Y 8 A: MAINSTAT
-# ALTERNATIVA 9 A: WRKHRS
-
-###-> WRKHRS
-# ALTERNATIVA 1 A: WRKHRS_TEX
-# ALTERNATIVA 8 Y 9 A: EMPREL
-
-###-> SALTO DESDE WRKSUP
-# ALTERNATIVA 1 Y 9 A: NSUP
-# ALTERNATIVA 2 Y 8 A: TYPORG1 
-
-###-> SALTO DESDE NSUP
-# ALTERNATIVA 1 A: NSUP_TEXT
-# ALTERNATIVA 8 Y 9: TYPORG1
-
-###-> SALTO DE ISCO08_1
-# ALTERNATIVA 1: ISCO08_1_TEX
-# ALTERNATIVA 8 Y 9 : ISCO08_2
-
-###-> SALTO DE ISCO08_2
-# ALTERNATIVA 1: ISCO08_2_TEXT
-# ALTERNATIVA 8 Y 9 : MAINSTAT
-
-###-> COALESCE MAINSTAT , MAINSTAT_OTRO: TRANSFORMAR PROMERO VALOR "10" EN
-# MAINSTAT EN NA
-
-###-> SALTO DESDE PARTLIV
-# ALTERNATIVA 1 Y 2 A: SPWORK
-# ALTERNATIVA 3 Y 8 A: PARTLIV
-# ALTERNATIVA 9 : SPWORK
-
-###-> SALTO DESDE SPWORK
-# ALTERNATIVA 1 A: SPWRKHRS
-# ALTERNATIVA 2 A: SPEMPREL
-# ALTERNATIVA 3 Y 8 A: SPMAINST
-# ALTERNATIVA 9 : SPWRKHRS
-
-###-> SALTO DESDE SPWRKHRS
-# ALTERNATIVA 1 A: SPWRKHRS_TEXT
-# ALTERNATIVA 8 Y 9 A: SPEMPREL
-
-###-> SALTO DESDE SPISCO08_1
-# ALTERNATIVA 1 A: SPISCO08_1_TEXT
-# ALTERNATIVA 8 Y 9 A: SPISCO08_2
-
-
-###-> SALTO DESDE SPISCO08_2
-# ALTERNATIVA 1 A: SPISCO08_2_TEX 
-# ALTERNATIVA 8 Y 9 A: SPMAINST
-
-###-> COALESCE NAT_RELIG , NAT_RELIG_OTRA = SE DEBE RECODIFICAR PRIMERO 8 COMO NA
-###-> COALESCE NAT_PRTY , NAT_PRTY_OTRA = SE DEBE RECODIFICAR PRIMERO 14 COMO NA
-###-> COALESCE NAT_ETHN1 , NAT_ETHN_2 = SE DEBE RECODIFICAR PRIMERO 11 COMO NA
-
-###-> SALTO DESDE SPISCO08_2
-# ALTERNATIVA 1 A: SPISCO08_2_TEX 
-# ALTERNATIVA 8 Y 9 A: SPMAINST
-
-
-###-> SALTO DESDE HOMPOP
-# ALTERNATIVA 1 A: HHOMPOP_OTRA
-# ALTERNATIVA 88 Y 99 A: LLENA UN 88 O 99 EN EL CAMPO DE LA VARIABLE
-
-
-###-> SALTO DESDE HHADULT
-# ALTERNATIVA 1 A: HHADULT_OTRA
-# ALTERNATIVA 88 Y 99 A: LLENA UN 88 O 99 EN EL CAMPO DE LA VARIABLE
-
-
-###-> SALTO DESDE HHCHILDR
-# ALTERNATIVA 1 A: HHCHILDR_OTRA
-# ALTERNATIVA 88 Y 99 A: LLENA UN 88 O 99 EN EL CAMPO DE LA VARIABLE
-
-###-> SALTO DESDE HHTODD
-# ALTERNATIVA 1 A: HHTODD_OTRA
-# ALTERNATIVA 88 Y 99 A: LLENA UN 88 O 99 EN EL CAMPO DE LA VARIABLE
-
-###-> COALESCE MARITAL , MARITAL_OTRA = SE DEBE RECODIFICAR PRIMERO 9 COMO NA
-###-> COALESCE F_BORN , F_BORN_OTRA = SE DEBE RECODIFICAR PRIMERO 11 COMO NA
-###-> COALESCE M_BORN , M_BORN_OTRA = SE DEBE RECODIFICAR PRIMERO 11 COMO NA
-###-> COALESCE INM_1 , INM_1_OTRA_COMUNA, INM_1_OTRO_PAIS = SE DEBE RECODIFICAR 
-# PRIMERO 2 Y 3 COMO NA
-
-###-> SALTO DESDE INM_1_OTRO_PAIS
-# CUALQUIER REGISTRO: INM_2
-
-###-> SALTO DESDE INM_2
-# ALTERNATIVA 1 A: INM_2_OTRA
-# ALTERNATIVA 88 Y 99 A: SEG_3
-
-###-> SALTO DESDE SEG3 
-# ALTERNATIVA 6 A:  TELFIJO
-# TODAS LAS DEMAS RESPUESTAS A: SEG_4
 
 
 ################################################################################
-################################### EJEMPLO ####################################
-################################################################################
-################### Seguimiento de NAs en variables obligatorias ###############
+########################## check de base de datos Baro   #######################
 ################################################################################
 
 
-ejemplo <- data.frame(id = 1:10,
-                   x1 = 10:19,                      # Ejemplo
-                   x2 = 20:29,
-                   x3 = c(NA,NA,NA,1,NA,1,99,1,NA,NA),
-                   x4 = c(NA,NA,NA,"BLANCO",NA,"BLANCO",99,"ROJO",NA,NA))
+data<- read_sav("Barometro.sav")
 
-# Creacisn de vector con el nombre de las variables/columnas que deben estar completas
+data <- data %>% filter(region==10)
+data<- data %>% filter(Status %in% c("Approved", "Requires Approval"))
 
-seleccion<-c("x1","x3")
+parte1<-data[1:33]
+parte2<-data[1000:ncol(data)]
 
-# Generacisn de data frame vacmo con la variable identificador de casos de la encuesta
-# Aqum guardaremos los resultados de la revisisn
+data1<-cbind(parte1, parte2)
+data1<-data1 %>% select(-(OH1_1:LR5_3)) # eliminamos preguntas de regionales que no son de los lagos
 
-resultadosNA<-data.frame(ejemplo$id)
+parte1<-NULL
+parte2<-NULL
 
-# Evaluacisn de las variables seleccionadas y casos NA mediante for
 
-for (i in seleccion){
-  # identifica posicisn de la variable/columna en el data frame:
-  coordenada<-grep(paste("^",i,"$", sep=""), names(ejemplo))
-  # revisa si hay NA en ese columna para cada fila del data frame. * 1, devuelve 1 o 0
-  columna<-((is.na(ejemplo[,coordenada]))*1)
-  # va pegando los resultados en el data frame vacmo creado previamente
-  resultadosNA<-cbind(assign("i",columna),resultadosNA)
+### Transformar variables dobles a numéricas
+
+
+nombres<-as.data.frame(look_for(data1)[[2]])
+nombres$tipo<-unname(look_for(data1)[[4]])
+
+nombres <- nombres %>% filter (! tipo %in% c("chr"))
+colnames(nombres)[1]<-"variables.base"
+
+
+posicion<-c()
+
+for (i in nombres$variables.base){
+  coordenada<-grep(paste0("^",i,"$"), names(data1))
+  data1[coordenada]<-as.numeric(unlist(data1[coordenada]))
   }
 
 
-# Reordenamiento del data frame de salida y etiquetaje de sus columnas
+# FUNDIR VARIAS VARIABLES (DE INGRESOS) AL MISMO TIEMPO
 
-resultadosNA<-rev(resultadosNA)
+grep("S12_tramo_1", names(data1))
+grep("S12_tramo_7", names(data1))
 
-rotulos<-  append("id.", seleccion)
+variables<-names(data1[211:217])
 
-colnames(resultadosNA)<-rotulos
-
-# Recodificacisn sugerida de las observaciones
-
-resultadosNA<-resultadosNA %>% 
-  dplyr::mutate_at(c(2:ncol(resultadosNA)), recode, '1'='NA', '0'='Con Dato')
-
-# Exportacisn de los resultados en excel
-
-# write.xlsx(resultadosNA, file = "Malla.Validacion.NA.xlsx", 
-#            sheetName="Sheet1", col.names=TRUE, row.names=FALSE, append=FALSE)  
-
+data1<- data1 %>% mutate(S12_tramo_1 = coalesce(!!! syms(variables)))
 
 ################################################################################
-############################## Seguimiento de Saltos ###########################
+######################### PREGUNTAS OBLIGATORIAS ###############################
 ################################################################################
 
-# Creacisn de vectores de SALIDA, LLEGADA y CRITERIOS DE SALTO
+# 1 MODULO IDENTIDAD, PERTENENCIA TERRITORIAL Y MOVILIDAD
 
-salida<-c("x2","x2","x2")
+# pregunta 1: p1_a,p1_b,p1_c
+# pregunta 2: p2
+# pregunta 5: p5_1:p5_11
+# pregunta 6: p6
+# pregunta 7: p7
+# pregunta 8: p8
+# pregunta 9: p9
+# pregunta 10: p10_1: p10_12
+# pregunta 11: p11_1: p11_12
+# pregunta 12: p12_1: p12_4
+# pregunta 13: p13_1: p13_11
+# pregunta 16: p16_1: p16_7
+# pregunta 17: p17_1: p17_7
+# pregunta 18: p18_a: p18_c
+# pregunta 19: p19_a: p19_c
+# pregunta 20: p20_a
+# pregunta 21: p21_a
+# pregunta 22: p22_a
+# pregunta 23: p23_1: p23_12
+# pregunta 26: p26_1: p26_8
+# pregunta 27: p27_1: p27_9
+# pregunta 28: p28
+# pregunta 29: p29
+# pregunta 30: p30_a
+# pregunta 31: p31
+# pregunta 32: p32
+# pregunta 33: p33_a: p33_c
+# pregunta 35: p35
+# pregunta 37: p37
+# pregunta 41: p41
+# pregunta r1: LL1
+# pregunta r2: LL2_1 : LL2_4
+# pregunta r3: LL3
+# pregunta r4: LL4
+# pregunta tel: telefono_contacto
+# pregunta s1: S1_sexo
+# pregunta s2: S2_edad
+# pregunta s3: S3_nacionalidad
+# pregunta s4: S4_nivel_estudio
+# pregunta s5: S5_estudios_sostenedor
+# pregunta s6: S6_actividad_principal
+# pregunta s7: S7_actividad_jefeHogar
+# pregunta s8: S8_ocupacion
+# pregunta s9: S9_pueblo_originario
+# pregunta s11: S11_personas_hogar
 
-llegada<-c("x3","x3","x3")
 
-criterio.salto<-c("25","23.27","23:27")
 
-# Creacisn de data frame con los id, donde guardaremos los resultados del bucle
 
-resultadosS<-data.frame(ejemplo$id)
+# pregunta s gse: S_GSE
+# pregunta s: S_A
 
-# Creamos una funcisn que servira para traducir en una secuencia de nzmeros imputs
-# como "1 3" o "9". Para ambos casos devolverma "1 2 3"  y "9" respectivamente
 
-secuencia<-function(objeto){
-  n<-length(objeto)
-  seq(objeto[[1]],objeto[[n]])
-}
 
 
-# Sobre todo al importar desde excel en ocasiones las comas son lemdas como puntos
-# por precaucisn realizamos una transformacisn para esos casos
 
-criterio.salto<- str_replace(criterio.salto, "\\.", ",")
+# 1ra forma: sin usar condicionales
 
 
-#
+########################### PREGUNTAS CON SALTO ################################
 
-for (i in 1:length(salida)){
-  
-  # 1ra parte, traducir en un rango de nzmeros imputs de caracteres como por ejemplo
-  # "2,5" en los nzmeros "2 5". imputs como "1:3", en rangos "1 2 3". Y unidades
-  # como "4", en el nzmero al que corresponden 
-  
-  ifelse ((str_detect(criterio.salto[i],",")), 
-          rango<- criterio.salto[i] %>% str_split(",") %>% 
-            unlist() %>% as.numeric(),
-          
-          rango<-criterio.salto[i] %>% str_split(":") %>%
-            unlist() %>% as.numeric() %>% secuencia
-  )
-  
-  # Identifica la posicisn en el data frame, de la variable/columna de salto
-  coordenada1<-grep(paste("^",salida[i],"$",sep=""), names(ejemplo))
-  # Identifica la posicisn en el data frame, de la variable/columna de llegada
-  coordenada2<-grep(paste("^",llegada[i],"$",sep=""), names(ejemplo))
-  
-  # Chequea si la variable de salto tiene obervaciones que cumplen la condicion 
-  # de filtro. La variable de BBDD debe ser de tipo numirica o integer para
-  # ello, nos aseguramos de eso incluyendo las funciones as.integer y unlist
-  variable1<-as.integer(unlist(ejemplo[,coordenada1]))
-  
-  s.check<-(variable1 %in%  rango)*1
-  
-  #Chequea si la variable de llegada tiene obervaciones
-  ll.check<-(!is.na(ejemplo[,coordenada2]))*1 
-  
-  # Se pegan los resultados anteriores, que son agregados al a otro data frame
-  # creado previamente, donde se registraran los resultados para cada individuo
-  revision<-paste0(s.check,ll.check)
-  resultadosS<-cbind(revision,resultadosS)
-}
 
+# salto p3(10) -> p3_1
+# salto p3(1:7) -> p4
+# salto p3(88,99) -> p5_1
+# salto p3(10) -> p3_1
+# salto p14(2,88,99) -> p14_1
+# salto s: S_A (1) -> S_B
 
-# Creacisn de nombres de columnas, reordenamiento de dataframe y etiquetaje
+############################# Salto tipo 2 #####################################
+# salto p2(2) ->p3(NA) -> p4
+# salto p35(3) -> p36 (NA )-> p37 dato. esta última es respondida por todos
 
-nombres.u<-c()
+####################### Detalle de preguntas por modulo ########################
 
-# Creamos el nombre de las columnas del data frame de revisisn, pegando los nombres
-# de las variables y salto llegada que correspondan, mas el criterio de salto 
+# 1 MODULO IDENTIDAD, PERTENENCIA TERRITORIAL Y MOVILIDAD
 
-for (i in 1:length(llegada)){
-  x1<-paste0(salida[i],"-",llegada[i], " (",criterio.salto[i],")")
-  nombres.u<-append(nombres.u,x1)
-  }
+m1<-c("p1_a","p1_b","p1_c", "p2", "p3", "p3_1")
 
+# 2 MODULO CONOCIMIENTO Y REPRESENTACIÓN DE LA REGIÓN 
 
-# Reordenar base de datos de revisisn y aqadir etiquetas
-resultadosS<-rev(resultadosS)
+m2<-c("p5_1","p5_2","p5_3","p5_4","p5_5","p5_6","p5_7","p5_8",
+"p5_9","p5_10","p5_11","p6","p7" )
 
-etiquetas<-  append("id", nombres.u)
+# 3 MODULO EVALUACIÓN DE LA REGIÓN (DEFINICIÓN DE PROBLEMAS Y PRIORIDADES REGIONALES) 
 
-colnames(resultadosS)<-etiquetas
+m3<-c("p8","p9","p10_1","p10_2","p10_3","p10_4","p10_5","p10_6","p10_7","p10_8",
+      "p10_9","p10_10","p10_11","p10_12","p11_1","p11_2","p11_3",
+      "p11_4","p11_5","p11_6","p11_7","p11_8","p11_9","p11_10","p11_11","p11_12")
 
+# 4 MODULO DISPOSICIÓN A LA PARTICIPACIÓN EN EL ESPACIO PÚBLICO Y EN EL PROCESO DE DESCENTRALIZACIÓN
 
-# Recodificacisn sugerida de las observaciones
+m4<-c("p12_1","p12_2","p12_3","p12_4","p13_1","p13_2","p13_3","p13_4","p13_5",
+      "p13_6","p13_7","p13_8","p13_9","p13_10","p13_11","P14","p14_1")
 
-resultadosS<-resultadosS %>% 
-  dplyr::mutate_at(c(2:ncol(resultadosS)), recode, '00'='sin salto', 
-                   '11'='s. correcto','01'='s. con otro valor', '10'='s. NA llegada')
 
+# 5 MODULO PERCEPCIÓN DE CONFLICTO SOCIOAMBIENTAL
 
+m5<-c("p16_1","p16_2","p16_3","p16_4","p16_5","p16_6","p16_7","p17_1","p17_2","p17_3",
+      "p17_4","p17_5","p17_6","p17_7")
 
-# Comparcisn de observaciones y resultados
+# 6 MODULO CONSUMO DE MEDIOS  
 
-contraste<-ejemplo %>% select(id,x2,x3)
+m6<-c("P18_a","p18_b","p18_c")
 
-contraste<-merge(contraste,resultadosS, all.x = T)
+# 7 OBSTÁCULOS Y HERRAMIENTAS PARA EL DESARROLLO REGIONAL 
 
+m7<-c("p19_a","p19_b","p19_c","p20_a","p21_a","p21_b","p22_a","p22_b","p23_1","p23_2",
+      "p23_3","p23_4","p23_5","p23_6","p23_7","p23_8","p23_9","p23_10",
+      "p23_11","p23_12")
 
+# 8 DESCENTRALIZACIÓN  
 
-# Exportacisn de los resultados en excel
-# 
-# write.xlsx(resultadosS, file = "Malla.Validacion.SALTO.xlsx", 
-#            sheetName="Sheet1", col.names=TRUE, row.names=FALSE, append=FALSE)  
-
-
-
-################################################################################
+m8<-c("p26_1","p26_2","p26_3","p26_4","p26_5","p26_6","p26_7","p26_8",
+"p27_1","p27_2","p27_3","p27_4","p27_5","p27_6","p27_7","p27_8",
+"p27_9","p28","p29","p30_a","p30_b","p31")
 
-################# VARIABLES DE INICIO Y TIRMINO DE LOS MODULOS #################
+# 9 EFECTOS DE LA PANDEMIA EN LA REGIÓN
 
-# 1 MODULO BASICO / M1_1A , M1_16
+m9<-c("p32","p33_a","p33_b","p33_c")
 
-# 2 MODULO PROCESO CONSTITUYENTE /  M2_1 , M2_13
+# 10 PROCESO CONSTITUYENTE
 
-# 3 MODULO GENERO / M3_1_1 , M3_28_5
+m10<-c("p35","p36","p37")
 
-# 4 MODULO DE ELECCIONES PRESIDENCIALES / M4_1 , M4_6
+# 11 IDENTIFICACIÓN POLÍTICA
 
-# 5 MODULO COYUNTURA / M5_1 , M5_7
+m11<-c("p39","p40","p41")
 
-# 6 MODULO SOCIOECONOMICO / SEXO  
+# 12 PREGUNTAS REGIONALES
 
+m12<-c("LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4")
 
-################################################################################
-########################## check de base de datos CEP 87 #######################
-################################################################################
 
+# 13 CARACTERIZACIÓN DEL ENTREVISTADO
 
-data<- read.xlsx("Base CEP-87 del 03-05-2022.xlsx", sheet = "BBDD")
+m13<-c("telefono_contacto","S1_sexo","S2_edad","S3_nacionalidad","S4_nivel_estudio",
+       "S5_estudios_sostenedor","S6_actividad_principal","S7_actividad_jefeHogar",
+       "S8_ocupacion","S9_pueblo_originario", "S11_personas_hogar","S12_tramo_1")
 
 
-data<-data[,c("ENTREVISTADOR","REGISTRO","DURACION", "UMP","AREA","REGION", "TOTAL_HOGAR",
-              "TOTAL_HOMBRES", "EDAD1_H", "TOTAL_MUJER", "EDAD1_M", "ROTACIONES",
-              "M1_1A","M1_1B","M1_1C","M1_2","M1_3","M1_4","M1_5","M1_6","M1_7",
-              "M1_8","M1_9","M1_11", "M1_12A","M1_12B","M1_12C","M1_12D","M1_12E",
-              "M1_12F","M1_12G","M1_12H","M1_12I","M1_12J","M1_12K","M1_12L",
-              "M1_12M","M1_12N","M1_12P","M1_12Q","M1_13_1","M1_13_2","M1_13_3",
-              "M1_13_4","M1_13_5","M1_13_6","M1_13_7","M1_13_8","M1_13_9",
-              "M1_13_10","M1_13_11","M1_13_12","M1_13_13","M1_13_14","M1_13_15",
-              "M1_13_16","M1_13_17","M1_13_18","M1_13_19","M1_13_20","M1_14",
-              "P15_1","P15_2","P15_3","P15_4","M1_16","M2_1","M2_2","M2_3","M2_4",
-              "M2_6A","M2_6AA","M2_6B","M2_6BB","M2_6C","M2_6CC","M2_14",
-              "M2_P14_OTRA","M2_5_1","M2_5_2","M2_5_3","M2_7","M2_8", "M2_9", 
-              "M2_9_OTRA", "M2_10", "M2_10_OTRA", "M2_11", "M2_11_OTRA",
-              "M2_12", "M2_12_OTRA", "M2_13","M3_1_1","M3_1_2","M3_1_3","M3_1_4",
-              "M3_1_5","M3_1_6", "M3_2A","M3_2B","M3_3A","M3_3B","M3_4_1",
-              "M3_4_2","M3_4_3","M3_4_4","M3_5_1","M3_5_2","M3_5_3","M3_5_4",
-              "M3_6", "M3_6_NUM","M3_7_1","M3_7_2","M3_7_3","M3_7_4","M3_7_5",
-              "M3_7_6","M3_8","P8B_MESES", "M3_9", "M3_10A","M3_10B","M3_11",
-              "M3_12","M3_13","M3_14","M3_15A","M2_15A_1","M3_15B","M3_15B_1",
-              "M3_FILTRO","M3_16A","M3_16A_1","M3_16B","M3_16B_1","M3_17",
-              "M3_18_1","M3_18_2","M3_18_3","M3_18_4","M3_18_5","M3_18_6",
-              "M3_19","M3_20_1","M3_20_2","M3_20_3","M3_20_4", "M3_20_2","M3_20_3",
-              "M3_20_4","M3_21","M3_22A","M3_22B","M3_23","M3_24","M3_25","M3_26",
-              "M3_27_1","M3_27_2","M3_27_3","M3_28_1","M3_28_2","M3_28_3","M3_28_4",
-              "M3_28_5", "M4_1","M4_2","M4_2B","M4_3","M4_4A","M4_4B","M4_5","M4_6",
-              "M4_5","M5_1","M5_6","M5_7","SEXO","EDAD","EDAD_EXACTA","NAC_DIA","NAC_MES",
-              "NAC_ANO", "EST",	"NIVELEDUC", "EDUCYRS", "EDUCYRS_TEX", "WRK","WRKHRS",
-              "WRKHRS_TEX","EMPREL","WRKSUP","NSUP","NSUP_TEX","TYPORG1","TYPORG2",
-              "ISCO08_1","ISCO08_1_TEX","ISCO08_2","ISCO08_2_TEX","MAINSTAT",
-              "MAINSTAT_OTRO","PARTLIV","SPWORK","SPWRKHRS","SPWRKHRS_TEXT",
-              "SPEMPREL","SPWRKSUP","SPISCO08_1","SPISCO08_1_TEX","SPISCO08_2",
-              "SPISCO08_2_TEX","SPMAINST","SPMAINST_OTRA","UNIO","NAT_RELIG",
-              "NAT_RELIG_OTRA","ATTEND","TOPBOT","NAT_PRTY","NAT_PRTY_OTRA",
-              "NAT_ETHN1","NAT_ETHN_2","ING_1","ING_2", "NHIJ", "HOMPOP",
-              "HHOMPOP_OTRA","HHADULT","HHADULT_OTRA","HHCHILDR",
-              "HHCHILDR_OTRA","HHTODD","HHTODD_OTRA","NAT_RINC","NAT_INC",
-              "MARITAL","MARITAL_OTRA","F_BORN","F_BORN_OTRA","M_BORN","M_BORN_OTRA",
-              "INM_1","INM_1_OTRA_COMUNA","INM_1_OTRO_PAIS","INM_2","INM_2_OTRA",
-              "SEG_3","SEG_4", "ACEPTA", "CEL", "C3","M2_4","TELFIJO", "NAC",
-              "SPISCO08_1_TEX","SPISCO08_2_TEX")]
 
-
-######################## UNION DE VARIABLES DE LA BASE #########################
-
-
-# fusion1<-data[,c("M2_14","M2_P14_OTRA","M2_9","M2_9_OTRA","M2_11","M2_11_OTRA",
-#               "M2_12","M2_12_OTRA","M3_6","M3_6_NUM","M3_16A","M3_16A_1",
-#               "M3_16B","M3_16B_1","MAINSTAT","MAINSTAT_OTRO","NAT_RELIG",
-#               "NAT_RELIG_OTRA","NAT_PRTY","NAT_PRTY_OTRA","NAT_ETHN1",
-#               "NAT_ETHN_2","MARITAL","MARITAL_OTRA","F_BORN","F_BORN_OTRA",
-#               "M_BORN","M_BORN_OTRA","INM_1","INM_1_OTRA_COMUNA","INM_1",
-#               "INM_1_OTRO_PAIS")]
-
-data[data=="-"]<-NA
-
-data$M2_14[data$M2_14==4]<-NA
-data$M2_9[data$M2_9==4]<-NA
-data$M2_11[data$M2_11==4]<-NA
-data$M2_12[data$M2_12==4]<-NA
-data$M3_6[data$M3_6==1]<-NA
-data$M3_16A[data$M3_16A==1]<-NA
-data$M3_16B[data$M3_16B==1]<-NA
-data$MAINSTAT[data$MAINSTAT==10]<-NA
-data$NAT_RELIG[data$NAT_RELIG==8]<-NA
-data$NAT_PRTY[data$NAT_PRTY==14]<-NA
-data$NAT_ETHN1[data$NAT_ETHN1==11]<-NA
-data$MARITAL[data$MARITAL==9]<-NA
-data$F_BORN[data$F_BORN==11]<-NA
-data$INM_1[data$M_BORN==2]<-NA
-data$INM_1[data$M_BORN==3]<-NA
-
-
-fusion<- read.xlsx("fusion.xlsx") # input donde tenemos una columna las variables
-# originales y en otra, las duplicadas 
-
-
-fusion$codigo<-paste0("data<-data %>% mutate (", fusion$original,
-                    "= coalesce (", fusion$original,
-                    ",", fusion$duplicada, "))")
-
-for (i in fusion$codigo){
-  print(i)
-}
-
-# FUSISN DE VARIABLES
-
-### ALGUNAS VARIABLES SON DE DIFERENTES CLASES, CUANDO ESO OCURRE SE ESTANDARIZAN
-### ANTES DE LA FUSION
-
-
-
-data<-data %>% mutate (M2_9= coalesce (M2_9,M2_9_OTRA))
-data<-data %>% mutate (M2_11= coalesce (M2_11,M2_11_OTRA))
-data<-data %>% mutate (M2_12= coalesce (M2_12,M2_12_OTRA))
-
-data$M3_6<-as.factor(data$M3_6)
-data<-data %>% mutate (M3_6= coalesce (M3_6,M3_6_NUM))
-
-data<-data %>% mutate (M3_16A= coalesce (M3_16A,M3_16A_1))
-data<-data %>% mutate (M3_16B= coalesce (M3_16B,M3_16B_1))
-
-data$MAINSTAT<-as.factor(data$MAINSTAT)
-data<-data %>% mutate (MAINSTAT= coalesce (MAINSTAT,MAINSTAT_OTRO))
-
-data$NAT_RELIG<-as.factor(data$NAT_RELIG)
-data<-data %>% mutate (NAT_RELIG= coalesce (NAT_RELIG,NAT_RELIG_OTRA))
-
-data$NAT_PRTY<-as.factor(data$NAT_PRTY)
-data<-data %>% mutate (NAT_PRTY= coalesce (NAT_PRTY,NAT_PRTY_OTRA))
-
-data$NAT_ETHN1<-as.factor(data$NAT_ETHN1)
-data<-data %>% mutate (NAT_ETHN1= coalesce (NAT_ETHN1,NAT_ETHN_2))
-
-data$MARITAL<-as.factor(data$MARITAL)
-data<-data %>% mutate (MARITAL= coalesce (MARITAL,MARITAL_OTRA))
-
-data$F_BORN<-as.factor(data$F_BORN)
-data<-data %>% mutate (F_BORN= coalesce (F_BORN,F_BORN_OTRA))
-
-data$M_BORN<-as.factor(data$M_BORN)
-data<-data %>% mutate (M_BORN= coalesce (M_BORN,M_BORN_OTRA))
-
-data$INM_1<-as.factor(data$INM_1)
-data<-data %>% mutate (INM_1= coalesce (INM_1,INM_1_OTRA_COMUNA))
-data<-data %>% mutate (INM_1= coalesce (INM_1,INM_1_OTRO_PAIS))
-
-
-############################# PREGUNTAS OBLIGATORIAS ###########################
-
-
-
-# VARIABLES (CON SALTO) QUE DEBEN EXCLUIRSE
-
-# 1 MODULO BASICO / M1_1A , M1_16 # deben escluirse:
-
-# NINGUNA
-
-# 2 MODULO PROCESO CONSTITUYENTE /  M2_1 , M2_13
-
-m2<-c("M2_6A","M2_6AA","M2_6B","M2_6BB","M2_9","M2_9_OTRA","M2_10","M2_10_OTRA",
-"M2_11","M2_11_OTRA","M2_12","M2_12_OTRA")
-
-# 3 MODULO GENERO / M3_1_1 , M3_28_5
-
-m3<-c("M3_8","M3_8B","P8B_MESES","M3_9","M2_15A_1","M3_15B_1","M3_16A","M3_16A_1",
-"M3_16B","M3_16B_1","M3_17","M3_18_1","M3_18_2","M3_18_3","M3_18_4","M3_18_5",
-"M3_18_6","M3_19")
-
-# 4 MODULO DE ELECCIONES PRESIDENCIALES / M4_1 , M4_6
-
-m4<-c("M4_2","M4_2B","M4_4A","M4_4B")
-
-# 5 MODULO COYUNTURA / M5_1 , M5_7
-
-# NINGUNA
-
-# 6 MODULO SOCIOECONOMICO / SEXO
-
-m6<-c("EDUCYRS","EDUCYRS_TEX","WRKHRS","WRKHRS_TEX","EMPREL","WRKSUP","NSUP",
-"NSUP_TEX","TYPORG1","TYPORG2","ISCO08_1","ISCO08_1_TEX","ISCO08_2","ISCO08_2_TEX",
-"MAINSTAT_OTRO","SPWORK","SPWRKHRS","SPWRKHRS_TEXT","SPWORK","SPWRKHRS","SPWRKHRS_TEXT",
-"HORAINI_DEMO_7","SPEMPREL","SPWRKSUP","SPISCO08_1","SPISCO08_1_TEX","SPISCO08_2",
-"SPISCO08_2_TEX","SPMAINST","SPMAINST_OTRA","NAT_RELIG_OTRA","NAT_PRTY_OTRA",
-"HHOMPOP_OTRA","HHADULT","HHADULT_OTRA","HHCHILDR","HHCHILDR_OTRA","HHTODD",
-"HHTODD_OTRA","CANT_RESP","SUMA_DEF","CONTROL_SUMA","MARITAL_OTRA","F_BORN_OTRA",
-"M_BORN_OTRA","INM_1_OTRA_COMUNA","INM_1_OTRO_PAIS","INM_2","INM_2_OTRA","SEG_4",
-"C4","INFO_CONT","B","DS_P50")
-
-
-# DESCONTAMOS LAS PREGUNTAS CON SALTO DE LAS VARIABLES A REVISAR
-
-preguntas.salto<-fusion$original
-preguntas.salto<-append(preguntas.salto,fusion$duplicada)
-preguntas.salto<-append(preguntas.salto,m2)
-preguntas.salto<-append(preguntas.salto,m3)
-preguntas.salto<-append(preguntas.salto,m4)
-preguntas.salto<-append(preguntas.salto,m6)
-
-names2<-setdiff(names(data), preguntas.salto)
-
-preguntas.o<-data %>% select(all_of(names2))
 
 ################################################################################
 
 ################################################################################
-################### Aplicacisn de loop y creacisn de planilla ##################
+################### Aplicacion de loop y creacion de planillas #################
 ################################################################################
 
 ################################################################################
 
-obligatorias<-names(preguntas.o)
+################################################################################
+######################## check de preguntas obligatorias #######################
+################################################################################
 
-resultadosNA<-data.frame(preguntas.o$ENTREVISTADOR)
+                # modulo 1
+obligatorias<-c("p1_a","p1_b","p1_c", "p2",
+                # modulo 2
+        "p5_1","p5_2","p5_3","p5_4","p5_5","p5_6","p5_7","p5_8",
+      "p5_9","p5_10","p5_11","p6","p7",
+                # modulo 3 
+"p8","p9","p10_1","p10_2","p10_3","p10_4","p10_5","p10_6","p10_7","p10_8",
+      "p10_9","p10_10","p10_11","p10_12","p11_1","p11_2","p11_3",
+      "p11_4","p11_5","p11_6","p11_7","p11_8","p11_9","p11_10","p11_11","p11_12",
+                # modulo 4
+"p12_1","p12_2","p12_3","p12_4","p13_1","p13_2","p13_3","p13_4","p13_5",
+      "p13_6","p13_7","p13_8","p13_9","p13_10","p13_11",
+                # modulo 5
+"p16_1","p16_2","p16_3","p16_4","p16_5","p16_6","p16_7",
+                # modulo 6
+"P18_a",
+                # modulo 7
+"p19_a","p19_b","p19_c","p20_a","p21_a","p22_a","p23_1","p23_2",
+      "p23_3","p23_4","p23_5","p23_6","p23_7","p23_8","p23_9","p23_10",
+      "p23_11","p23_12",
+                # modulo 8
+"p26_1","p26_2","p26_3","p26_4","p26_5","p26_6","p26_7","p26_8",
+      "p27_1","p27_2","p27_3","p27_4","p27_5","p27_6","p27_7","p27_8",
+      "p27_9","p28","p29","p30_a","p31",
+                # modulo 9
+"p32","p33_a",
+                # modulo 10
+"p35","p37",
+                # modulo 11
+"p41", 
+                # modulo 12
+"LL1","T_LL2_1","T_LL2_2","T_LL2_3","T_LL2_4","LL3","LL4",
+                # modulo 13
+"telefono_contacto","S1_sexo","S2_edad","S3_nacionalidad","S4_nivel_estudio",
+       "S5_estudios_sostenedor","S6_actividad_principal","S7_actividad_jefeHogar",
+       "S8_ocupacion","S9_pueblo_originario", "S11_personas_hogar","S12_tramo_1")
 
-seleccion<-c("EDAD","REGISTRO")
 
-# Evaluacisn de las variables seleccionadas y casos NA mediante for
+
+
+
+# Evaluación de las variables seleccionadas y casos NA mediante el bucle
+
+
+
+#######
+
+resultadosNA<-data.frame(data1$SbjNum)
 
 for (i in obligatorias){
-  coordenada<-grep(paste0("^",i,"$"), names(preguntas.o))
-  columna<-((is.na(preguntas.o[,coordenada]))*1)
+  coordenada<-grep(paste0("^",i,"$"), names(data1))
+  columna<-((!is.na(data1[,coordenada]) & data1[,coordenada] != "")*1)
   resultadosNA<-cbind(assign("i",columna),resultadosNA)
 }
 
@@ -579,56 +284,61 @@ rotulos<-  append("id.", obligatorias)
 
 colnames(resultadosNA)<-rotulos
 
+
+# Reporte resumen (completitud total variables)
+
+valores<-unname(round(colMeans(resultadosNA[2:ncol(resultadosNA)]),2)*100)
+
+
+resumen.n<-as.data.frame(obligatorias)
+resumen.n$'% de completitud'<-valores
+
 # Recodificacisn sugerida de las observaciones
 
 resultadosNA<-resultadosNA %>% 
-  dplyr::mutate_at(c(2:ncol(resultadosNA)), recode, '1'='NA', '0'='Con Dato')
+  dplyr::mutate_at(c(2:ncol(resultadosNA)), recode, '0'='NA', '1'='Dato')
 
-# Exportacisn de los resultados en excel
-
-write.xlsx(resultadosNA, file = "Malla.Validacion.NA.xlsx", 
-           sheetName="Sheet1", col.names=TRUE, row.names=FALSE, append=FALSE)  
+#####
+  
 
 
 ################################################################################
 
 ################################################################################
-######################## REVISISN DE PREGUNTAS CON FILTRO ######################
+###################### REVISION DE PREGUNTAS CON SALTO 1 #######################
 ################################################################################
 
 ################################################################################
 
-# Creacisn de vectores SALIDAS, LLEGADAS y CRITERIO DE SALTO
+# Creación de vectores SALIDAS, LLEGADAS y CRITERIO DE SALTO
 
-i.s.ll<- read.xlsx("salto.llegada.xlsx") # imput donde tenemos una columna para el
-# origen del salto, y otra para su llegada
+# salto p3(10) -> p3_1
+# salto p3(1:7) -> p4
+# salto p3(88,99) -> p5_1
+# salto p3(10) -> p3_1
+# salto p14(2,88,99) -> p14_1
+# salto s: S_A (1) -> S_B
 
-salida<-c(i.s.ll$salto)
 
-llegada<-c(i.s.ll$llegada)
 
-# pendiente, el criterio de salto no ha sido actualizado a la bbdd original
 
-criterio.salto<-c(i.s.ll$criterio.salto)
-criterio.salto<- str_replace(criterio.salto, "\\.", ",")
+salida<-c("p3","p3","p3","P14","S_A")
+
+criterio.salto<-c("10","1:7","88,99","1","1")
+
+llegada<-c("p3_1","p4","p5_1","p14_1", "S_B")
+
+
 
 
 
 ################################################################################
 
 
-# Extraemos las variables de mnteres del data.frame
+#####
+# Creacion de data frame con los id, donde guardaremos los resultados del bucle
 
-names3<-append(salida,llegada)
-
-setdiff(names3,names(data))
-
-preguntas.s<-data %>% select(all_of(names3))
-
-
-# Creacisn de data frame con los id, donde guardaremos los resultados del bucle
-
-resultadosS<-data.frame(data$ENTREVISTADOR)
+resultadosS<-data.frame(data1$SbjNum)
 
 #
 
@@ -649,37 +359,61 @@ for (i in 1:length(salida)){
             unlist() %>% as.numeric() %>% secuencia
   )
 
-  coordenada1<-grep(paste("^",salida[i],"$",sep=""), names(preguntas.s))
-  coordenada2<-grep(paste("^",llegada[i],"$",sep=""), names(preguntas.s))
+  coordenada1<-grep(paste("^",salida[i],"$",sep=""), names(data1))
+  coordenada2<-grep(paste("^",llegada[i],"$",sep=""), names(data1))
  
-  variable1<-as.integer(unlist(ejemplo[,coordenada1]))
+  variable1<-as.integer(unlist(data1[,coordenada1]))
   
   s.check<-(variable1 %in%  rango)*1
-  ll.check<-(!is.na(preguntas.s[,coordenada2]))*1 
+  
+  
+  ll.check<-(!is.na(data1[,coordenada2]) & data1[,coordenada2] != "")*1
 
   revision<-paste0(s.check,ll.check)
   resultadosS<-cbind(revision,resultadosS)
 }
 
 
-# Creacisn de nombres de columnas, reordenamiento de dataframe y etiquetaje
+# Creacion de nombres de columnas, reordenamiento de dataframe y etiquetaje
 
 nombres.u<-c()
 
 
 for (i in 1:length(llegada)){
-  x1<-paste0(salida[i],"-",llegada[i], " (",criterio.salto[i],")")
+  x1<-paste0(salida[i]," (",criterio.salto[i],")","-> ",llegada[i])
   nombres.u<-append(nombres.u,x1)
 }
 
 
-# Reordenar base de datos de revisisn y aqadir etiquetas
+# Reordenar base de datos y colocacion de etiquetas
 resultadosS<-rev(resultadosS)
 
 etiquetas<-  append("id", nombres.u)
 
 colnames(resultadosS)<-etiquetas
 
+# resumen
+
+resumen.s<-as.data.frame(nombres.u)
+
+saltos.p<-resultadosS[2:ncol(resultadosS)]
+
+
+
+saltos.p[saltos.p=="00"]<-NA
+saltos.p[saltos.p=="11"]<-1
+saltos.p[saltos.p=="10"]<-0
+saltos.p[saltos.p=="01"]<-0
+
+
+for (i in 1:ncol(saltos.p)){
+  saltos.p[i]<-as.numeric(unlist(saltos.p[i]))
+}
+
+valores<-unname(round(colMeans(saltos.p[1:ncol(saltos.p)], na.rm = T),2)*100)
+
+
+resumen.s$'% de saltos correctos'<-valores
 
 # Recodificacisn sugerida de las observaciones
 
@@ -688,95 +422,130 @@ resultadosS<-resultadosS %>%
                    '11'='s. correcto','01'='s. con otro valor', '10'='s. NA llegada')
 
 
-# Exportacisn de los resultados en excel
-# 
- write.xlsx(resultadosS, file = "Malla.Validacion.SALTO.xlsx",
-           sheetName="Sheet1", col.names=TRUE, row.names=FALSE, append=FALSE)
 
-####
- 
- #############################################################################
-                                  "SENAPESCA"
- #############################################################################
- 
- data<-read_sav("datos_DS2113_SERNAPESCA_PT_18_08_2021.sav")
- 
- data<-data[,c("REGISTRO", "F1","F2")]
- 
- # Creacisn de data frame con los id, donde guardaremos los resultados del bucle
- 
- resultadosS<-data.frame(data$REGISTRO)
- 
- 
- salida<-c("F1","F2")
- 
- criterio.salto<-c("1:2","1:2")
- 
- #
- 
- secuencia<-function(objeto){
-   n<-length(objeto)
-   seq(objeto[[1]],objeto[[n]])
- }
- 
- #
- 
- for (i in 1:length(salida)){
-   
-   ifelse ((str_detect(criterio.salto[i],",")), 
-           rango<- criterio.salto[i] %>% str_split(",") %>% 
-             unlist() %>% as.numeric(),
-           
-           rango<-criterio.salto[i] %>% str_split(":") %>%
-             unlist() %>% as.numeric() %>% secuencia
-   )
-   
-   coordenada1<-grep(paste("^",salida[i],"$",sep=""), names(data))
-   
-   variable1<-as.numeric(unlist(data[,coordenada1]))
-   na.check<-(is.na(variable1))*1
-   rango.check<-(variable1 %in%  rango)*1
-    
-   revision<-paste0(na.check,rango.check)
-   resultadosS<-cbind(revision,resultadosS)
- }
- 
+
+################################################################################
+
+################################################################################
+###################### REVISION DE PREGUNTAS CON SALTO 2 #######################
+################################################################################
+
+################################################################################
+
+
+
+# salto p2(2) ->p3(NA) -> p4
+# salto p35(3) -> p36 (NA )-> p37 dato. esta última es respondida por todos
+
+
+
+
+salida<-c("p2","p35")
+
+criterio.salto<-c("2","3")
+
+llegada1<-c("p3","p36")
+
+llegada2<-c("p4","p37")
+
+
+resultados2<-data.frame(data1$SbjNum)
+
+
+for (i in 1:length(salida)){
   
- 
- # Creacisn de nombres de columnas, reordenamiento de dataframe y etiquetaje
- 
- nombres.u<-c()
- 
- 
- for (i in 1:length(salida)){
-   x1<-paste0(salida[i], " (",criterio.salto[i],")")
-   nombres.u<-append(nombres.u,x1)
- }
- 
- 
- # Reordenar base de datos de revisisn y aqadir etiquetas
- resultadosS<-rev(resultadosS)
- 
- etiquetas<-  append("id", nombres.u)
- 
- colnames(resultadosS)<-etiquetas
- 
- 
- # Recodificacisn sugerida de las observaciones
- 
- resultadosS<-resultadosS %>% 
-   dplyr::mutate_at(c(2:ncol(resultadosS)), recode, '00'='Fuera de rango',
-                    '01'='cumple criterio', '10'='NA')
- 
- 
- # Exportacisn de los resultados en excel
- # 
- write.xlsx(resultadosS, file = "Malla.Validacion.SALTO.xlsx",
-            sheetName="Sheet1", col.names=TRUE, row.names=FALSE, append=FALSE)
- 
- ####
- 
- 
- 
- 
+  ifelse ((str_detect(criterio.salto[i],",")), 
+          rango<- criterio.salto[i] %>% str_split(",") %>% 
+            unlist() %>% as.numeric(),
+          
+          rango<-criterio.salto[i] %>% str_split(":") %>%
+            unlist() %>% as.numeric() %>% secuencia
+  )
+  
+  coordenada1<-grep(paste("^",salida[i],"$",sep=""), names(data1))
+  coordenada2<-grep(paste("^",llegada1[i],"$",sep=""), names(data1))
+  coordenada3<-grep(paste("^",llegada2[i],"$",sep=""), names(data1))
+  
+  variable1<-as.integer(unlist(data1[,coordenada1]))
+  
+  s.check<-(variable1 %in%  rango)*1
+  
+  
+  ll.check1<-(!is.na(data1[,coordenada2]) & data1[,coordenada2] != "")*1
+  ll.check2<-(!is.na(data1[,coordenada3]) & data1[,coordenada3] != "")*1
+  
+  revision<-paste0(s.check,ll.check1, ll.check2)
+  resultados2<-cbind(revision,resultados2)
+}
 
+
+# Creacion de nombres de columnas, reordenamiento de dataframe y etiquetaje
+
+nombres.2<-c()
+
+
+for (i in 1:length(llegada1)){
+  x1<-paste0(salida[i],"(",criterio.salto[i],")",":",llegada1[i],";",llegada2[i])
+  nombres.2<-append(nombres.2,x1)
+}
+
+
+# Reordenar base de datos y colocacion de etiquetas
+resultados2<-rev(resultados2)
+
+etiquetas<-  append("id", nombres.2)
+
+colnames(resultados2)<-etiquetas
+
+# resumen
+
+resumen.s2<-as.data.frame(nombres.2)
+
+saltos.p<-resultados2[2:ncol(resultados2)]
+
+
+
+saltos.p[saltos.p=="000"]<-NA
+saltos.p[saltos.p=="101"]<-1
+saltos.p[saltos.p=="111"]<-0
+saltos.p[saltos.p=="100"]<-0
+saltos.p[saltos.p=="011"]<-NA
+saltos.p[saltos.p=="001"]<-0
+saltos.p[saltos.p=="010"]<-0
+saltos.p[saltos.p=="110"]<-0
+
+###
+
+for (i in 1:ncol(saltos.p)){
+  saltos.p[i]<-as.numeric(unlist(saltos.p[i]))
+}
+
+valores<-unname(round(colMeans(saltos.p[1:ncol(saltos.p)], na.rm = T),2)*100)
+
+
+resumen.s2$'% de saltos correctos'<-valores
+
+# Recodificacisn sugerida de las observaciones
+
+resultados2<-resultados2 %>% 
+  dplyr::mutate_at(c(2:ncol(resultadosS)), recode, '000'='sin salto', 
+                   '101'='s. correcto','111'='error', '100'='error',
+                   '011'='sin salto','001'='sin salto','010'='sin salto',
+                   '110'='error')
+
+
+ # Exportacion de los resultados a excel único
+ 
+ 
+ listado <- list("resumen NA variable" = resumen.n, 
+                 "NA Desagregado" = resultadosNA,
+                 "resumen SALTO 1" = resumen.s,
+                 "SALTO 1 Desagregado" = resultadosS,
+                 "resumen SALTO 2" = resumen.s2,
+                 "SALTO 2 Desagregado" = resultados2)
+ 
+ 
+ write.xlsx(listado, file = "malla.de.validacion.R10.xlsx", row.names = TRUE)
+ 
+ 
+ 

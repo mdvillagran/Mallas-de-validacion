@@ -268,6 +268,7 @@ for (i in 1:length(salida)){
   # como "4", en el nzmero al que corresponden 
   
   ifelse ((str_detect(criterio.salto[i],",")), 
+          
           rango<- criterio.salto[i] %>% str_split(",") %>% 
             unlist() %>% as.numeric(),
           
