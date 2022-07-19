@@ -430,7 +430,7 @@ saltos.p[saltos.p=="111"]<-0
 saltos.p[saltos.p=="100"]<-0
 saltos.p[saltos.p=="011"]<-NA
 saltos.p[saltos.p=="001"]<-NA
-saltos.p[saltos.p=="010"]<-0
+saltos.p[saltos.p=="010"]<-NA
 saltos.p[saltos.p=="110"]<-0
 
 ###
@@ -465,7 +465,7 @@ resultados2<-resultados2 %>%
                  "SALTO 2 Desagregado" = resultados2)
  
  
- write.xlsx(listado, file = "malla.de.validacion.R10.xlsx", row.names = TRUE)
+ write.xlsx(listado, file = "malla.de.validacion.R10.xlsx", rowNames = TRUE)
  
  
  

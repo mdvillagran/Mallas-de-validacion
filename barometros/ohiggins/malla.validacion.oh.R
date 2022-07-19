@@ -26,7 +26,7 @@ parte1<-data[1:33]
 parte2<-data[1000:ncol(data)]
 
 data1<-cbind(parte1, parte2)
-data1<-data1 %>% select(-(NU1:LR5_3)) # eliminamos preguntas de regionales que no son de Ohhigins
+data1<-data1 %>% select(-(NU1:LR5_3)) # eliminamos preguntas regionales que no son de Ohiggins
 data1<-data1 %>% select(-(LL1:LL4))
 
 parte1<-NULL
@@ -442,7 +442,7 @@ saltos.p[saltos.p=="111"]<-0
 saltos.p[saltos.p=="100"]<-0
 saltos.p[saltos.p=="011"]<-NA
 saltos.p[saltos.p=="001"]<-NA
-saltos.p[saltos.p=="010"]<-0
+saltos.p[saltos.p=="010"]<-NA
 saltos.p[saltos.p=="110"]<-0
 
 ###

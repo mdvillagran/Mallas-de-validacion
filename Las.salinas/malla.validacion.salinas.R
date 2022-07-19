@@ -10,6 +10,7 @@ library(tidyverse)
 library(stringr)
 library(haven)
 library(labelled)
+library(ggplot2)
 
 
 
@@ -20,7 +21,7 @@ library(labelled)
 ################################################################################
 
 
-data<- read_sav("DS2219_ Las_Salinas-jun_-22_2022_05_07_15_10.sav")
+data<- read_sav("DS2219_ Las_Salinas-jun_-22_2022_19_07_17_31.sav")
 
 data<- data %>% filter(Status %in% c("Approved", "Requires Approval"))
 
@@ -32,6 +33,7 @@ data1<-cbind(parte1, parte2)
 parte1<-NULL
 parte2<-NULL
 
+#
 
 ### Transformar variables dobles a numéricas
 
@@ -53,17 +55,24 @@ for (i in nombres$variables.base){
 
 ############### CONTEO DE AVANCE POR ENCUESTAS POR UMP Y SECTOR ################
 
-sectores<-read.xlsx("muestrafinal_LasSalinas.xlsx")
+sectores<-read.xlsx("muestrafinal_LasSalinas.xlsx") # planificación de encuestas
 
-sectores<-sectores %>% select(Sector, UMP_ORIGINAL)
+sectores<-sectores %>% dplyr::select(Sector,UMP_ORIGINAL)
 
 
 
-ump<-data1 %>% select(ump)
+ump<-data1 %>% dplyr::select(ump) # encuestas levantadas en terreno
 
 ump$encuestas=1
 
-conteo1<-aggregate(encuestas~ump, ump,sum)
+conteo1<-aggregate(encuestas~ump, ump,sum) # Encuestas totales terreno, por UMP
+
+
+# comparación de encuestas levantadas v/s planificadas
+# (avance de encuestas por ump y sector)
+
+# !!!! Hay varias UMPs nuevas en terreno por lo tanto pueden haber discrepancias
+# al pegar el avance en terreno a las umps planificadas por sector
 
 colnames(sectores)[2]<-"ump"
 
@@ -71,10 +80,97 @@ encuestas.ump.sector<-merge(sectores, conteo1, all.x = T)
 
 encuestas.ump.sector$encuestas[with(encuestas.ump.sector, is.na(encuestas) )] <-0
 
+encuestas.ump.sector$planificadas=8
 
-encuestas.ump.sector = encuestas.ump.sector [ , c(2,1,3)]
+# encuestas.ump.sector = encuestas.ump.sector [ , c(2,1,3,4)]
+# 
+# write.xlsx(encuestas.ump.sector, file = "avance.de.encuestas.xlsx", row.names = TRUE)
 
-write.xlsx(encuestas.ump.sector, file = "avance.de.encuestas.xlsx", row.names = TRUE)
+#### Avance de encuestas para cada sector
+
+encuestas.sector<-aggregate(cbind(planificadas,encuestas)~Sector,encuestas.ump.sector,
+                            sum)
+
+
+encuestas.sector$progreso<-(round(encuestas.sector$encuestas/encuestas.sector$planificadas,3))*100
+
+
+write.xlsx(encuestas.sector, file = "avance.de.encuestas.xlsx", rowNames = TRUE)
+
+
+### gráfico
+
+
+
+encuestas.sector <- encuestas.sector %>% 
+  mutate(sectores=case_when(str_detect(.$Sector,".*ConCón") ~ "Concón",
+                         str_detect(.$Sector,".*Forestal") ~ "Forestal",
+                         str_detect(.$Sector,".*Reñaca") ~ "Reñaca",
+                         str_detect(.$Sector,".*Viña del Mar") ~ "Viña del Mar",
+                         str_detect(.$Sector,".*Santa Ines") ~ "Santa Inés",
+                         TRUE ~ "Sector Plan")) 
+
+
+# TOTAL DE ENCUESTAS POR Concón, Forestal, Reñaca, Viña del Mar, Santa Inés y Plan
+
+total.encuestas.sector<-aggregate(cbind(planificadas,encuestas)~sectores,encuestas.sector,
+                                  sum)
+
+total.encuestas.sector$progreso<-total.encuestas.sector$encuestas/(sum(total.encuestas.sector$encuestas))
+
+grafo1<-total.encuestas.sector %>% dplyr::select(sectores, progreso)
+
+
+grafico.progreso<-grafo1 %>%
+  ggplot(aes(x=2, y=progreso, fill=sectores))+
+  geom_bar(stat = "identity", position = position_stack(), width = 1) +
+  coord_polar("y") +
+  geom_text(aes(label= paste(round(progreso*100,0),"%" )), 
+            position=position_stack(vjust = 0.5), size = 4,
+            color = (c("black","black","black",
+                               "black","white","white"))) +
+  scale_fill_viridis_d(begin=0, end = 1, direction = -1, option = "viridis")+
+  theme(plot.title = element_text(size = 13, face = "bold"),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank()) +
+  labs(title = "Avance de encuestas por sector", 
+       caption="N = 358") +
+  xlim(0.5,2.5) +
+  theme_void()
+
+grafico.progreso
+
+
+grafo1<-as.data.frame(c("Meta","Logradas"))
+names(grafo1)[1]<-"balance"
+
+grafo1$encuestas<-sum(total.encuestas.sector$planificadas)
+grafo1$encuestas[grafo1$balance=="Logradas"]<-sum(total.encuestas.sector$encuestas)
+
+grafo1$progreso<-grafo1$encuestas/(sum(grafo1$encuestas))
+
+grafico.progreso<-grafo1 %>%
+  ggplot(aes(x=2, y=progreso, fill=balance))+
+  geom_bar(stat = "identity", position = position_stack(), width = 1) +
+  coord_polar("y") +
+  geom_text(aes(label= paste(round(progreso*100,0),"%" )), 
+            position=position_stack(vjust = 0.5), size = 4,
+            color = (c("white","black"))) +
+  scale_fill_viridis_d(begin=0, end = 0.7, direction = -1, option = "viridis")+
+  theme(plot.title = element_text(size = 15, face = "bold", hjust=0.5),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank()) +
+  labs(title = "Avance de encuestas total") +
+  xlim(0.5,2.5) +
+  theme_void()
+
+grafico.progreso
 
 
 ###############################################################################
@@ -100,8 +196,8 @@ sjmisc::frq(objeto1) # 110 encuestas finalizadas
 ######################## check de preguntas obligatorias #######################
 ################################################################################
 
-                # identidicadores
-obligatorias<-c("SbjNum","Srvyr","comuna",".", "p2",
+                # identificadores
+obligatorias<-c("SbjNum","Srvyr","comuna",
                 # Preguntas 2:5
     "T_p2_1", "T_p2_2", "T_p2_3", "T_p2_4","T_p2_5","T_p2_6", "T_p2_7", "T_p2_8",
 "T_p2_9","T_p2_10", "p3","T_p4_1","T_p4_2", "T_p4_3", "p5_1","p5_2",
@@ -216,7 +312,8 @@ data1 <- mutate(data1, p17.18 = case_when(
 # p20_O8(6)->p21
 
 data1 <- mutate(data1, p20.21 = case_when(
-  p20_O1 == 6 | p17_2 == 6 ~ 1
+  p20_O1 == 6 | p20_O2 == 6 |  p20_O3 == 6 | p20_O4 == 6 |
+    p20_O5 == 6 | p20_O6 == 6 | p20_O7 == 6 | p20_O8 == 6 ~ 1
   
 ))
 
@@ -284,7 +381,7 @@ data1 <- mutate(data1, p38.39 = case_when(
 salida<-c("p7","p32","p33","p5.6","p14.15","p17.18","p20.21","p26.27","p28.29",
           "p36.37","p38.39")
 
-criterio.salto<-c("1,88,99","1","2","12","6","6","6","10","11","10","12")
+criterio.salto<-c("1","1","2","1","1","1","1","1","1","1","1")
 
 llegada<-c("p8","p33","p34","p6","p15","p18","p21","p27","p29","p37","p39")
 
@@ -463,7 +560,7 @@ saltos.p[saltos.p=="111"]<-0
 saltos.p[saltos.p=="100"]<-0
 saltos.p[saltos.p=="011"]<-NA
 saltos.p[saltos.p=="001"]<-NA
-saltos.p[saltos.p=="010"]<-0
+saltos.p[saltos.p=="010"]<-NA
 saltos.p[saltos.p=="110"]<-0
 
 ###
@@ -480,7 +577,7 @@ resumen.s2$'% de saltos correctos'<-valores
 # Recodificacisn sugerida de las observaciones
 
 resultados2<-resultados2 %>% 
-  dplyr::mutate_at(c(2:ncol(resultadosS)), recode, '000'='sin salto', 
+  dplyr::mutate_at(c(2:ncol(resultados2)), recode, '000'='sin salto', 
                    '101'='s. correcto','111'='error', '100'='error',
                    '011'='sin salto','001'='sin salto','010'='sin salto',
                    '110'='error')
@@ -498,7 +595,7 @@ resultados2<-resultados2 %>%
                  "SALTO 2 Desagregado" = resultados2)
  
  
- write.xlsx(listado, file = "malla.validacion.salinas.xlsx", row.names = TRUE)
+ write.xlsx(listado, file = "1972022.malla.salinas.xlsx", rowNames = TRUE)
  
  
  
