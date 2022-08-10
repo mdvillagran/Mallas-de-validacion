@@ -22,6 +22,8 @@ data<- read_sav("Barometro.sav")
 data <- data %>% filter(region==6)
 data<- data %>% filter(Status %in% c("Approved", "Requires Approval"))
 
+data <- data[!is.na(data$S1_sexo),]
+
 parte1<-data[1:33]
 parte2<-data[1000:ncol(data)]
 

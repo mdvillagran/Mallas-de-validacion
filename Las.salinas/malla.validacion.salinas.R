@@ -21,7 +21,7 @@ library(ggplot2)
 ################################################################################
 
 
-data<- read_sav("DS2219_ Las_Salinas-jun_-22_2022_19_07_17_31.sav")
+data<- read_sav("DS2219_ Las_Salinas-jun_-22_2022_26_07_10_04.sav")
 
 data<- data %>% filter(Status %in% c("Approved", "Requires Approval"))
 
@@ -595,7 +595,42 @@ resultados2<-resultados2 %>%
                  "SALTO 2 Desagregado" = resultados2)
  
  
- write.xlsx(listado, file = "1972022.malla.salinas.xlsx", rowNames = TRUE)
+ write.xlsx(listado, file = "2772022.malla.salinas.xlsx", rowNames = TRUE)
  
  
+################################################################################
+                            "Avance por sector"
+################################################################################
+
+ 
+avance<-read.xlsx("sector Las salinas.xlsx")
+ 
+output<-as.data.frame(sjmisc::frq(avance$Sector)) 
+
+output<-output[,-1]
+output<-output[,-2]
+
+output$val<-as.factor(output$val)
+
+output$val<-forcats::fct_explicit_na(output$val, "NA")
+
+colnames(output)<-c("Sector", "Total de encuestas", "%", "% acum.")
+
+output$'% válido'<-NA
+
+total<-round((output$N/((sum(output$N))-output$N[nrow(output)])),3)
+
+total<-total*100
+
+total1<-total[1:(length(total)-1)]
+
+total1<-append(total1, NA)
+
+output$`% válido`<-total1
+
+output = output [ , c(1,2,3,5,4)]
+
+
+write.xlsx(output, file = "avance.Las.salinas.xlsx", rowNames = TRUE)
+
  
