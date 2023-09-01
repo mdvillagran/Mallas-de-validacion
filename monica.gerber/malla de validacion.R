@@ -11,7 +11,7 @@ setwd("C:/Users/Villagran/Desktop/datavoz/20.3.2023 Violencia social Gerber/BBDD
 
 
 
-bbdd<-read_spss("3dejulio.sav")
+bbdd<-read_spss("BBDD17.7.sav")
 
 
 
